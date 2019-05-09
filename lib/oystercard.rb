@@ -1,13 +1,14 @@
 class Oystercard
 
-  attr_reader :balance
+  attr_reader :balance, :entry_station, :exit_station, :list
   CAPACITY = 90
   MINIMUM_FARE = 1
 
+
   def initialize
     @balance = 0
-    @swipe = false
-    @location = []
+    @list = []
+
   end
 
   def top_up(money)
@@ -15,19 +16,30 @@ class Oystercard
     @balance += money
   end
 
-  def touch_in
+  def touch_in(station)
     fail 'not enough funds (minimum fare £1)' if @balance < MINIMUM_FARE 
-    @swipe = true
+    @entry_station = station
+    @station = station
   end
 
-  def touch_out
-    @balance -= MINIMUM_FARE
-    @swipe = false
+  def touch_out(station)
+    deduct(MINIMUM_FARE)
+    @entry_station = nil
+    @exit_station = station
   end
 
   def in_journey?
-    @swipe
+    @entry_station == nil ? false : true
   end
+
+  def journey 
+    journey = Hash.new
+    @journey = journey.merge(@station => @exit_station)
+  end
+
+  def list_of_journeys
+    @list << @journey
+  end 
 
   private
   def deduct(money)

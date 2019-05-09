@@ -1,3 +1,3 @@
-class Money
+# class Money
 
-end
+# end
